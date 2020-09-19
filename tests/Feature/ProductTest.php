@@ -57,7 +57,8 @@ class ProductTest extends TestCase
 
         // Check if the object exists in the database
         $product->id = $response->decodeResponseJson()['product']['id'];
-        $this->checkProduct($product);
+        //$this->checkProduct($product);
+        $this->checkObject($product, '/api/products/', 'product', 'name');
     }
 
     /**
@@ -81,8 +82,9 @@ class ProductTest extends TestCase
             ->assertJsonPath('product.name', $newName);
         
         // Check if updated object is in database
-        $product->name = $newName;        
-        $this->checkProduct($product);
+        $product->name = $newName;     
+        //$this->checkProduct($product);
+        $this->checkObject($product, '/api/products/', 'product', 'name');
     }
 
     /**
@@ -94,7 +96,8 @@ class ProductTest extends TestCase
         $product = Product::factory()->create();
 
         // Check if the new object is in the database
-        $this->checkProduct($product);
+        //$this->checkProduct($product);
+        $this->checkObject($product, '/api/products/', 'product', 'name');
 
         $response = $this->deleteJson(
             '/api/products/' . $product->id
@@ -106,24 +109,7 @@ class ProductTest extends TestCase
             ->assertJson([ 'success' => true ]);
 
         // Check if the object is not the detabase
-        $this->checkProduct($product, false);
-    }
-
-    protected function checkProduct(Product $product, $assertTrue = true)
-    {
-        $response = $this->getJson(
-            '/api/products/' . $product->id
-        );
-
-        if($assertTrue) {
-
-            $response
-                ->assertStatus(200)
-                ->assertJsonPath('product.name', $product->name);
-        }
-        else {
-
-            $response->assertStatus(404);
-        }
+        //$this->checkProduct($product, false);
+        $this->checkObject($product, '/api/products/', 'product', 'name', false);
     }
 }
