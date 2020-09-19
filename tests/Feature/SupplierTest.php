@@ -86,5 +86,78 @@ class SupplierTest extends TestCase
             ->assertJsonValidationErrors(['name']);
     }
 
-    
+    /**
+     * Create a new object and try to update it in database
+     */
+    public function testUpdate()
+    {
+        // Create a new Object in the database
+        $supplier = Supplier::factory()->create();
+        $newName = 'Modified Supplier name';
+
+        $response = $this->putJson(
+            '/api/suppliers/' . $supplier->id,
+            [ 'name' => $newName ]
+        );
+
+        // Check if response contains updated values
+        $response
+            ->assertStatus(200)
+            ->assertJson([ 'success' => true ])
+            ->assertJsonPath('supplier.name', $newName);
+        
+        // Check if updated object is in database
+        $supplier->name = $newName;     
+        $this->checkObject($supplier, '/api/suppliers/', 'supplier', 'name');
+    }
+
+    /**
+     * Try to create an object with an existing unique attribute
+     * 
+     * @return void
+     */
+    public function testUniqueUpdate()
+    {
+        // Create two new objects in base
+        $supplier1 = Supplier::factory()->create();
+        $this->checkObject($supplier1, '/api/suppliers/', 'supplier', 'name');
+
+        $supplier2 = Supplier::factory()->create();
+        $this->checkObject($supplier2, '/api/suppliers/', 'supplier', 'name');
+
+        // Try to set the second object name on the first one
+        $response = $this->putJson(
+            '/api/suppliers/' . $supplier1->id,
+            [ 'name' => $supplier2->name ]
+        );
+
+        // Check the response of the API
+        $response
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['name']);
+    }
+
+    /**
+     * Create a new object and try to delete it
+     */
+    public function testDelete()
+    {        
+        // Create a new Object in the database
+        $supplier = Supplier::factory()->create();
+
+        // Check if the new object is in the database
+        $this->checkObject($supplier, '/api/suppliers/', 'supplier', 'name');
+
+        $response = $this->deleteJson(
+            '/api/suppliers/' . $supplier->id
+        );
+       
+        // Try to delete object
+        $response
+            ->assertStatus(200)
+            ->assertJson([ 'success' => true ]);
+
+        // Check if the object is not the detabase
+        $this->checkObject($supplier, '/api/suppliers/', 'supplier', 'name', false);
+    }
 }
