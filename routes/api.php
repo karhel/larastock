@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\SupplierController;
+use App\Http\Controllers\API\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resources([
-    'products' => ProductController::class
+    'products'      => ProductController::class,
+    'suppliers'     => SupplierController::class,
+    'orders'        => OrderController::class
 ]);

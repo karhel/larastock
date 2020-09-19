@@ -4,12 +4,12 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Product extends JsonResource
+class Order extends JsonResource
 {
     /**
      * The "data" wrapper that should be applied
      */
-    public static $wrap = 'product';
+    public static $wrap = 'order';
 
     /**
      * Transform the resource into an array.
