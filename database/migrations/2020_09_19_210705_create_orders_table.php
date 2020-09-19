@@ -20,6 +20,8 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('supplier_id')->index();
             $table->timestamps();
 
+            $table->unique(['number', 'supplier_id']);
+
             // Foreign key(s)
             $table->foreign('supplier_id')
                 ->references('id')->on('suppliers')
