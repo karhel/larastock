@@ -24,8 +24,8 @@ class OrderUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'number' => 'required',
-            'supplier_id' => 'required'
+            'number' => [ 'required' ],
+            'supplier_id' => [ 'required' ]
         ];
     }
 }
