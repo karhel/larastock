@@ -129,6 +129,8 @@ return [
     |
     */
 
+    'unique_composite_keys' =>  "The :attribute,:column must be unique.",
+
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',

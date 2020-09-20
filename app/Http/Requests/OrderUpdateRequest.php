@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\UniqueCompositeKeys;
 
 class OrderUpdateRequest extends FormRequest
 {
@@ -24,8 +25,13 @@ class OrderUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'number' => [ 'required' ],
-            'supplier_id' => [ 'required' ]
+            'number' => [ 
+                'required',
+                new UniqueCompositeKeys('orders', 'supplier_id')
+            ],
+            'supplier_id' => [ 
+                'required'
+            ]
         ];
     }
 }
